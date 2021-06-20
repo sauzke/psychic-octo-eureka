@@ -8,4 +8,8 @@
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
   </body>
+  <script>
+    var rows =<%-JSON.stringify(dataset)%>
+    console.log(rows);
+  </script>
 </html>
