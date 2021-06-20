@@ -1,11 +1,62 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+
+<head>
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/bootstrap-slider.css">
+  <script type="text/javascript" src="/js/bootstrap-slider.js"></script>
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    var myMapsApiKey = 'AIzaSyCiHMXH3HWTM8PXXPn6iI5Pe-UYXBoq3iE';
+    google.charts.load('current', {
+      packages: ['geochart'],
+      mapsApiKey: myMapsApiKey
+    });
+    google.charts.setOnLoadCallback(drawRegionsMap);
+
+    var rows =<%-JSON.stringify(dataset) %>;
+    var currentMonth = rows[1];
+
+    function drawRegionsMap() {
+      var data = google.visualization.arrayToDataTable(currentMonth);
+
+      var options = {
+        displayMode: 'regions',
+        resolution: 'provinces',
+        region: 'CA',
+        colorAxis: { colors: ['#88d1f1', 'blue'] }
+      };
+
+      var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+      chart.draw(data, options);
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="jumbotron">
+      <h1>COVID New Cases In Canada in 2021</h1>
+      <div id="regions_div" style="width: 900px; height: 500px;"></div>
+      <input id="ex13" type="text" />
+    </div>
+  </div>
+</body>
+<script>
+  var slider = new Slider("#ex13", {
+    ticks: [1, 2, 3, 4, 5, 6],
+    ticks_labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    tooltip: 'hide',
+    value: 1
+  });
+
+  slider.on("change", function (slide) {
+    currentMonth = rows[slide.newValue];
+    drawRegionsMap();
+  });
+</script>
+
 </html>
