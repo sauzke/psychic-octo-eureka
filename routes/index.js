@@ -17,19 +17,25 @@ router.get('/', function (req, res, next) {
     }
   };
 
-  // connect to your database
   sql.connect(config, function (err) {
-
     if (err) console.log(err);
-
-    // create Request object
     var request = new sql.Request();
-
-    // query to the database and get the records
-    request.query('select location, date, new_cases from "owid-covid-data" where location is not null', function (err, data) {
-
+    var query = "select prname as province, sum(numtoday) as new_cases, Month(date) as month from covid19 where YEAR(date) = '2021' and prname not in ('Canada', 'Repatriated travellers') group by prname, Month(date) order by prname, month(date);"
+    request.query(query, function (err, dataset) {
       if (err) console.log(err)
-      res.render('index', { title: 'Express', dataset: data.recordset });
+
+      var data = [];
+      var records = dataset.recordsets[0];
+
+      for( let i=1; i<=6; i++){
+        data[i] = [['Province', 'New Cases']];
+      }
+
+      for( var item in records ){
+        var ds = records[item];
+        data[ds.month].push([ds.province, ds.new_cases]);
+      }
+      res.render('index', { title: 'Express', dataset: data });
     });
   });
 });
