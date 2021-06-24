@@ -26,7 +26,7 @@
         displayMode: 'regions',
         resolution: 'provinces',
         region: 'CA',
-        colorAxis: { colors: ['#88d1f1', 'blue'] }
+        colorAxis: { colors: ['#88d1f1', 'blue'], maxValue: 100000 }
       };
 
       var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
@@ -47,8 +47,8 @@
 </body>
 <script>
   var slider = new Slider("#ex13", {
-    ticks: [1, 2, 3, 4, 5, 6],
-    ticks_labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    ticks: [1, 2, 3, 4, 5],
+    ticks_labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
     tooltip: 'hide',
     value: 1
   });
